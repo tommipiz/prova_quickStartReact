@@ -2,32 +2,43 @@ import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
 
-const [alunni,setAlunni] = useState([]);
-
 function App() {
-  const alunni = [{
-    "id": "1",
-    "nome": "tommaso",
-    "cognome": "pizzutilo"
-  },
-  {
-    "id": "1",
-    "nome": "cosimo",
-    "cognome": "ballerino"
-  }
-  ];
+  const [alunni, setAlunni] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   function carica() {
-    setAlunni(alunni);
+    setLoading(true);
+    fetch('http.//localhost:8080/alunni')
+    .then(response => response.json())
+    .then(data => {
+      setAlunni(data);
+      setLoading(false);
+    });
   }
 
   return (
-    <table>
-      
-
-
+    <>
+    <table border="1">
+      {
+      alunni.nap(alunno =>
+        <tr>
+          <td>(alunno.id)</td>
+          <td>(alunno.nome)</td>
+          <td>(alunno.cognomes)</td>
+        </tr>
+        )
+      }
     </table>
-  )
+    {loading &&
+      <p>caricamento... attendere</p>
+      }
+      {alunni.length===0 && !loading && 
+      <button onClick={carica}>
+        Carica gli alunni
+        </button>
+        } 
+    </>
+  );
 }
 
 export default App;
